@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 
 namespace OwinConsoleApp
 {
-    internal class Program
+    using AppFunc = Func<IDictionary<string, object>, Task>;
+
+    public class Program
     {
         private static void Main(string[] args)
         {
@@ -35,9 +37,9 @@ namespace OwinConsoleApp
 
     public class HelloWorldComponent
     {
-        private readonly Func<IDictionary<string, object>, Task> _next;
+        private readonly AppFunc _next;
 
-        public HelloWorldComponent(Func<IDictionary<string, object>, Task> next)
+        public HelloWorldComponent(AppFunc next)
         {
             _next = next;
         }
@@ -47,7 +49,7 @@ namespace OwinConsoleApp
             var stream = environment["owin.ResponseBody"] as Stream;
             using (StreamWriter writer = new StreamWriter(stream))
             {
-                writer.WriteAsync("Hello, World!");
+                writer.WriteAsync($"Hello, World!");
             }
 
             await _next(environment);
