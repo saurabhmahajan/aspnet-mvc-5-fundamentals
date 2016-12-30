@@ -31,22 +31,15 @@ namespace OwinConsoleApp
         public void Configuration(IAppBuilder app)
         {
             //app.Run(ctx => ctx.Response.WriteAsync("Hello, World!!"));
-            app.UseHelloWorld();
-        }
-    }
 
-    public static class AppBuilderExtensions
-    {
-        public static IAppBuilder UseHelloWorld(this IAppBuilder app)
-        {
-            app.Use(async (environemnt, next) =>
-            {
-                foreach (var pair in environemnt.Environment)
-                {
-                    Console.WriteLine($"{pair.Key} : {pair.Value}");
-                }
-                await next();
-            });
+            //            app.Use(async (environemnt, next) =>
+            //            {
+            //                foreach (var pair in environemnt.Environment)
+            //                {
+            //                    Console.WriteLine($"{pair.Key} : {pair.Value}");
+            //                }
+            //                await next();
+            //            });
 
             app.Use(async (environment, next) =>
             {
@@ -55,6 +48,14 @@ namespace OwinConsoleApp
                 Console.WriteLine($"Response Status : {environment.Response.StatusCode}");
             });
 
+            app.UseHelloWorld();
+        }
+    }
+
+    public static class AppBuilderExtensions
+    {
+        public static IAppBuilder UseHelloWorld(this IAppBuilder app)
+        {
             return app.Use<HelloWorldComponent>();
         }
     }
@@ -68,15 +69,13 @@ namespace OwinConsoleApp
             _next = next;
         }
 
-        public async Task Invoke(IDictionary<string, object> environment)
+        public Task Invoke(IDictionary<string, object> environment)
         {
             var stream = environment["owin.ResponseBody"] as Stream;
             using (StreamWriter writer = new StreamWriter(stream))
             {
-                writer.WriteAsync($"Hello, World!");
+                return writer.WriteAsync($"Hello, World!");
             }
-
-            await _next(environment);
         }
     }
 }
