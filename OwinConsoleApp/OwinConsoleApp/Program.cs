@@ -3,9 +3,8 @@ using Owin;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace OwinConsoleApp
 {
@@ -30,17 +29,6 @@ namespace OwinConsoleApp
     {
         public void Configuration(IAppBuilder app)
         {
-            //app.Run(ctx => ctx.Response.WriteAsync("Hello, World!!"));
-
-            //            app.Use(async (environemnt, next) =>
-            //            {
-            //                foreach (var pair in environemnt.Environment)
-            //                {
-            //                    Console.WriteLine($"{pair.Key} : {pair.Value}");
-            //                }
-            //                await next();
-            //            });
-
             app.Use(async (environment, next) =>
             {
                 Console.WriteLine($"Request path : {environment.Request.Path}");
@@ -48,7 +36,20 @@ namespace OwinConsoleApp
                 Console.WriteLine($"Response Status : {environment.Response.StatusCode}");
             });
 
+            ConfigureWebApi(app);
+
             app.UseHelloWorld();
+        }
+
+        private void ConfigureWebApi(IAppBuilder app)
+        {
+            var configuration = new HttpConfiguration();
+            configuration.Routes.MapHttpRoute(
+                name: "DefaultApi",
+                routeTemplate: "api/{controller}/{id}",
+                defaults: new { controller = "Greeting", id = RouteParameter.Optional });
+
+            app.UseWebApi(configuration);
         }
     }
 
