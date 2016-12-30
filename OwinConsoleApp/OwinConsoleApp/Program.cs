@@ -42,13 +42,15 @@ namespace OwinConsoleApp
             _next = next;
         }
 
-        public Task Invoke(IDictionary<string, object> environment)
+        public async Task Invoke(IDictionary<string, object> environment)
         {
             var stream = environment["owin.ResponseBody"] as Stream;
             using (StreamWriter writer = new StreamWriter(stream))
             {
-                return writer.WriteAsync("Hello, World!");
+                writer.WriteAsync("Hello, World!");
             }
+
+            await _next(environment);
         }
     }
 }
