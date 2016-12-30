@@ -39,6 +39,22 @@ namespace OwinConsoleApp
     {
         public static IAppBuilder UseHelloWorld(this IAppBuilder app)
         {
+            app.Use(async (environemnt, next) =>
+            {
+                foreach (var pair in environemnt.Environment)
+                {
+                    Console.WriteLine($"{pair.Key} : {pair.Value}");
+                }
+                await next();
+            });
+
+            app.Use(async (environment, next) =>
+            {
+                Console.WriteLine($"Request path : {environment.Request.Path}");
+                await next();
+                Console.WriteLine($"Response Status : {environment.Response.StatusCode}");
+            });
+
             return app.Use<HelloWorldComponent>();
         }
     }
