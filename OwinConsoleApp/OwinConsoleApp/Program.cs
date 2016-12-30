@@ -31,7 +31,15 @@ namespace OwinConsoleApp
         public void Configuration(IAppBuilder app)
         {
             //app.Run(ctx => ctx.Response.WriteAsync("Hello, World!!"));
-            app.Use<HelloWorldComponent>();
+            app.UseHelloWorld();
+        }
+    }
+
+    public static class AppBuilderExtensions
+    {
+        public static IAppBuilder UseHelloWorld(this IAppBuilder app)
+        {
+            return app.Use<HelloWorldComponent>();
         }
     }
 
