@@ -10,20 +10,20 @@ namespace OwinConsoleApp
 {
     using AppFunc = Func<IDictionary<string, object>, Task>;
 
-    public class Program
-    {
-        private static void Main(string[] args)
-        {
-            string uri = "http://localhost:5000";
+    //public class Program
+    //{
+    //    private static void Main(string[] args)
+    //    {
+    //        string uri = "http://localhost:5000";
 
-            using (WebApp.Start<Startup>(uri))
-            {
-                Console.WriteLine("Started!");
-                Console.ReadKey();
-                Console.WriteLine("Stopped!");
-            }
-        }
-    }
+    //        using (WebApp.Start<Startup>(uri))
+    //        {
+    //            Console.WriteLine("Started!");
+    //            Console.ReadKey();
+    //            Console.WriteLine("Stopped!");
+    //        }
+    //    }
+    //}
 
     public class Startup
     {
